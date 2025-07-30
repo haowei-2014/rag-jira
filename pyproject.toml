@@ -1,0 +1,18 @@
+[project]
+name = "uv-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bs4>=0.0.2",
+    "chromadb>=1.0.15",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.27",
+    "langchain-core>=0.3.72",
+    "langchain-openai>=0.3.28",
+    "langgraph>=0.6.1",
+    "pandas>=2.3.1",
+    "streamlit>=1.47.1",
+    "typing-extensions>=4.14.1",
+]
