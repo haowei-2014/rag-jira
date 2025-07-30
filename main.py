@@ -29,10 +29,6 @@ class State(TypedDict):
 class JiraAgent:
     def __init__(self):
 
-        # retrieval arguments
-        self.k = 1
-        self.score_threshold = 0.15
-
         self.llm = ChatOpenAI(model="gpt-4o")
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
@@ -62,6 +58,10 @@ class JiraAgent:
                 ("system", "You are an assistant for answering jira questions. You are given a retrieved context which includes an existing similar question, its description and its resolution. Use the retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.\nQuestion: {question} \nContext: {context} \nAnswer:")
             ]
         )
+
+        # retrieval arguments
+        self.k = 1
+        self.score_threshold = 0.15
 
         # Compile graph
         graph_builder = StateGraph(State).add_sequence([self.retrieve, self.generate])
