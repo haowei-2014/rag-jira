@@ -19,7 +19,7 @@ It uses similarity_search_with_relevance_scores method to get the most similar q
 ### Generation
 It checks resolved field of the retrieved question. If flase, then answers "The retrieved issue has not been resolved yet.". Otherwise, adds the resolution field to the content as well for generation.
 
-## How to run
+## How to run it locally
 
 ### Install dependencies
 
@@ -33,3 +33,11 @@ source .venv/bin/activate
 ```bash
 streamlit run main.py
 ```
+
+## To DO: Deploy it to AWS
+So far we have run the streamlit service locally. We can deploy it to AWS so that it can be accessed from anywhere. We can follow the same way as I wrote in a medium blog post in 2023: [Deploy a Streamlit app to AWS](https://pub.towardsai.net/deploy-triton-inference-server-with-aws-ecs-part-3-4-210fb6d707f6). 
+
+### Build a docker image
+### Push the docker image to AWS ECR
+### Run the service with AWS ECS
+
