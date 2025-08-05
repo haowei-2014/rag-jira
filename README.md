@@ -1,6 +1,6 @@
-# jira-qa: A RAG system to answer your jira questions
+# jira-qa: A RAG system to answer your IT issue
 
-This is a RAG system to answer your jira questions. It uses a CSV file which contains old jira tickets and their resolutions as the knowledge base, and uses OpenAI to answer your new questions.
+This is a RAG system to answer your IT issue. It uses a CSV file which contains old jira tickets and their resolutions as the knowledge base, and uses LLM to answer your new questions.
 
 The RAG system is orchestrated using LangGraph. The web app is run using streamlit. The python dependencies are managed by uv.
 
@@ -11,7 +11,7 @@ Indexing is done as a one-time job. In the runtime, it consists of Retrieval and
 ![LangGraph graph](graph.png)
 
 ### Indexing
-It reads a csv file which contains old jira tickets and their resolutions. Page content of a Document object is represented by a concatenation of 'Issue', 'Description' and 'Category' fields in csv file. Chroma is used as vector store, and OpenAIEmbeddings is used as embedding.
+It reads a csv file which contains old jira tickets and their resolutions. Page content of a Document object is represented by a concatenation of 'Issue', 'Description' and 'Category' fields in csv file. Chroma is used as vector store, and HuggingFaceEmbeddings is used as embedding.
 
 ### Retrieval
 It uses similarity_search_with_relevance_scores method to get the most similar question, i.e., top 1 question and score threshold 0.15 in this implementation. In case there is no matching question, returns empty context list and a score 0. 
@@ -40,4 +40,3 @@ So far we have run the streamlit service locally. We can deploy it to AWS so tha
 ### Build a docker image
 ### Push the docker image to AWS ECR
 ### Run the service with AWS ECS
-
