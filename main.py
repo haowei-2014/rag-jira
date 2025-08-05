@@ -1,23 +1,17 @@
 import os, getpass
 import streamlit as st
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain_core.documents import Document
 from langgraph.graph import START, StateGraph
 from typing_extensions import List, TypedDict
 from langchain_core.prompts.chat import ChatPromptTemplate
 import pandas as pd
-from langchain_openai import OpenAIEmbeddings
 import bs4
 import chromadb
+from typing import Dict, Union
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
 
-def _set_env(var: str):
-    if not os.environ.get(var):
-        os.environ[var] = getpass.getpass(f"{var}: ")
-
-_set_env("OPENAI_API_KEY")
-_set_env("LANGSMITH_API_KEY")
 
 # Define state for application
 class State(TypedDict):
@@ -29,8 +23,18 @@ class State(TypedDict):
 class JiraAgent:
     def __init__(self):
 
-        self.llm = ChatOpenAI(model="gpt-4o")
-        self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+        # Load LLM
+        llm_endpoint = HuggingFaceEndpoint(
+            repo_id="Nexusflow/Athene-V2-Chat",
+            temperature=0,
+            max_new_tokens=512
+        )
+        self.llm = ChatHuggingFace(llm=llm_endpoint)
+
+        # Load Embeddings
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_kwargs={"device": "cpu"})
 
         # Load CSV
         df = pd.read_csv("ticket_dump_1.csv")
@@ -85,7 +89,7 @@ class JiraAgent:
         scores = [score for _, score in results_with_scores]
         return {"context": retrieved_docs, "score": scores[0]}
 
-    def generate(self, state: State):
+    def generate(self, state: State) -> Dict[str, str]:
         """
         Define generation steps
         """
