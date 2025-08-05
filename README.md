@@ -2,7 +2,7 @@
 
 This is a RAG system to answer your jira questions. It uses a CSV file which contains old jira tickets and their resolutions as the knowledge base, and uses OpenAI to answer your new questions.
 
-The RAG system is orchestrated using LangGraph. The web app is run using streamlit.
+The RAG system is orchestrated using LangGraph. The web app is run using streamlit. The python dependencies are managed by uv.
 
 ## How it works
 
@@ -34,7 +34,7 @@ source .venv/bin/activate
 streamlit run main.py
 ```
 
-## To DO: Deploy it to AWS
+## To Do: Deploy it to AWS
 So far we have run the streamlit service locally. We can deploy it to AWS so that it can be accessed from anywhere. We can follow the same way as I wrote in a medium blog post in 2023: [Deploy a Streamlit app to AWS](https://pub.towardsai.net/deploy-triton-inference-server-with-aws-ecs-part-3-4-210fb6d707f6). 
 
 ### Build a docker image
