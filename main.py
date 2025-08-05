@@ -11,7 +11,7 @@ import chromadb
 from typing import Dict, Union
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
-
+import argparse
 
 # Define state for application
 class State(TypedDict):
@@ -21,7 +21,7 @@ class State(TypedDict):
     score: float
 
 class JiraAgent:
-    def __init__(self):
+    def __init__(self, input_file: str):
 
         # Load LLM
         llm_endpoint = HuggingFaceEndpoint(
@@ -37,7 +37,7 @@ class JiraAgent:
             model_kwargs={"device": "cpu"})
 
         # Load CSV
-        df = pd.read_csv("ticket_dump_1.csv")
+        df = pd.read_csv(input_file)
 
         # Convert rows into Document objects
         documents = []
@@ -72,7 +72,7 @@ class JiraAgent:
         graph_builder.add_edge(START, "retrieve")
         self.graph = graph_builder.compile()
 
-    def retrieve(self, state: State):
+    def retrieve(self, state: State) -> Dict[str, Union[List[Document], float]]:
         """
         Define retrieval steps
         """
@@ -110,17 +110,19 @@ class JiraAgent:
             response = "The retrieved issue has not been resolved yet."
             return {"answer": response}
 
-def main():
+def main(input_file: str):
 
-    jira_agent = JiraAgent()
+    jira_agent = JiraAgent(input_file)
 
     # Streamlit Dashboard
-    st.title("A RAG system to answer your jira questions")
+    st.title("A RAG system to answer your IT issue")
 
-    question = st.text_input("Enter your question:")
-    if st.button("Submit") and question:
+    issue = st.text_input("Enter your issue:")
+    description = st.text_input("Enter your issue's description:")
+    category = st.text_input("Enter your issue's category:")
+    if st.button("Submit") and issue:
         state: State = {
-            "question": question,
+            "question": issue,
             "context": [],
             "answer": "",
             "score": 0.0
@@ -137,4 +139,10 @@ def main():
         st.write(state["answer"])
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="A RAG system to answer your jira questions"
+    )
+    parser.add_argument("--input_file", type=str, default="ticket_dump_1.csv")
+    args = parser.parse_args()
+    
+    main(args.input_file)
